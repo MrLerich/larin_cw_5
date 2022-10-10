@@ -96,19 +96,15 @@ class PlayerUnit(BaseUnit):
         """
 
         if self.stamina < self.weapon.stamina_per_hit:
-            f"{self.name} попытался использовать {self.weapon.name}, но у него не хватило выносливости.\n" \
-            f"{self.name}, ты слишком слаб для этого!!! ХаХаХа!!!"
+            return f"{self.name} попытался использовать {self.weapon.name}, но у него не хватило выносливости.\n" \
+                   f"{self.name}, ты слишком слаб для этого!!! ХаХаХа!!!"
 
         damage = self._count_damage(target)
         if damage > 0:
-            f"{self.name} используя {self.weapon.name} пробивает {target.armor.name} соперника и наносит {damage} урона."
+            return f"{self.name} используя {self.weapon.name} пробивает {target.armor.name} соперника и наносит {damage} урона."
 
-
-
-
-        # TODO результат функции должен возвращать следующие строки:
-
-        f"{self.name} используя {self.weapon.name} наносит удар, но {target.armor.name} cоперника его останавливает."
+        return f"{self.name} используя {self.weapon.name} наносит удар, но {target.armor.name} cоперника его блокирует.\n" \
+               f"Звезда в шоке!!!"
 
 
 
@@ -123,7 +119,17 @@ class EnemyUnit(BaseUnit):
         Если умение не применено, противник наносит простой удар, где также используется
         функция _count_damage(target
         """
-        # TODO результат функции должен возвращать результат функции skill.use или же следующие строки:
-        f"{self.name} используя {self.weapon.name} пробивает {target.armor.name} и наносит Вам {damage} урона."
-        f"{self.name} используя {self.weapon.name} наносит удар, но Ваш(а) {target.armor.name} его останавливает."
-        f"{self.name} попытался использовать {self.weapon.name}, но у него не хватило выносливости."
+        if not self._is_skill_used and self.stamina >= self.unit_class.skill.stamina and randint(0, 100) < 10:
+            return self.use_skill(target)
+
+        if self.stamina < self.weapon.stamina_per_hit:
+            return  f"{self.name} попытался использовать {self.weapon.name}, но у него не хватило выносливости.\n" \
+                    f"Шалабон!"
+
+        damage = self._count_damage(target)
+        if damage > 0:
+            return f"{self.name} используя {self.weapon.name} пробивает {target.armor.name} и наносит Вам {damage} урона."
+
+        return f"{self.name} используя {self.weapon.name} наносит удар, но Ваш(а) {target.armor.name} его останавливает.\n" \
+               f"Стопэээ!!!"
+
