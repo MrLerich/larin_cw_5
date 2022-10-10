@@ -1,9 +1,10 @@
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from equipment import Equipment, Weapon, Armor
-from classes import UnitClass
 from random import randint
-from typing import Optional
+
+from classes import UnitClass
+from equipment import Weapon, Armor
 
 
 class BaseUnit(ABC):
@@ -61,7 +62,6 @@ class BaseUnit(ABC):
         if damage > 0:
             self.hp -= damage
 
-
     @abstractmethod
     def hit(self, target: BaseUnit) -> str:
         """
@@ -107,7 +107,6 @@ class PlayerUnit(BaseUnit):
                f"Звезда в шоке!!!"
 
 
-
 class EnemyUnit(BaseUnit):
 
     def hit(self, target: BaseUnit) -> str:
@@ -123,8 +122,8 @@ class EnemyUnit(BaseUnit):
             return self.use_skill(target)
 
         if self.stamina < self.weapon.stamina_per_hit:
-            return  f"{self.name} попытался использовать {self.weapon.name}, но у него не хватило выносливости.\n" \
-                    f"Шалабон!"
+            return f"{self.name} попытался использовать {self.weapon.name}, но у него не хватило выносливости.\n" \
+                   f"Шалабон!"
 
         damage = self._count_damage(target)
         if damage > 0:
@@ -132,4 +131,3 @@ class EnemyUnit(BaseUnit):
 
         return f"{self.name} используя {self.weapon.name} наносит удар, но Ваш(а) {target.armor.name} его останавливает.\n" \
                f"Стопэээ!!!"
-
