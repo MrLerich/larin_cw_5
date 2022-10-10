@@ -47,6 +47,10 @@ class BaseUnit(ABC):
         #  если у защищающегося нехватает выносливости - его броня игнорируется
         #  после всех расчетов цель получает урон - target.get_damage(damage)
         #  и возвращаем предполагаемый урон для последующего вывода пользователю в текстовом виде
+        self.stamina -= self.weapon.stamina_per_hit
+        damage = self.weapon.damage * self.unit_class.attack
+
+        if target.stamina > target.armor.stamina_per_turn * target.unit_class
         return damage
 
     def get_damage(self, damage: int) -> Optional[int]:
