@@ -30,7 +30,7 @@ ThiefClass = UnitClass(
     attack=1.5,
     stamina=1.2,
     armor=1.0,
-    skill=HardShot
+    skill=HardShot()
 )
 
 unit_classes = {

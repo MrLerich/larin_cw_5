@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
+
 from equipment import Equipment
 from classes import unit_classes
 from base import Arena
@@ -98,6 +99,7 @@ def choose_hero():
             'armors': armors,
             }
         return render_template('hero_choosing.html', result=result)
+
     elif request.method == 'POST':
         name = request.form['name']
         armor_name = request.form['armor']
@@ -116,7 +118,31 @@ def choose_enemy():
     # TODO кнопка выбор соперников. 2 метода GET и POST
     # TODO также на GET отрисовываем форму.
     # TODO а на POST отправляем форму и делаем редирект на начало битвы
-    pass
+    if request.method == 'GET':
+
+        equipment = Equipment()
+        weapons = equipment.get_weapons_names()
+        armors = equipment.get_armors_names()
+        classes = unit_classes
+        result = {
+            'header': 'Выберите противника',
+            'classes': classes,
+            'weapon': weapons,
+            'armors': armors,
+        }
+        return render_template('hero_choosing.html', result=result)
+
+    elif request.method == 'POST':
+        name = request.form['name']
+        armor_name = request.form['armor']
+        weapon_name = request.form['weapon']
+        unit_class = request.form['unit_class']
+        enemy = EnemyUnit(name=name, unit_class=unit_classes[unit_class])
+        equipment = Equipment()
+        enemy.equip_armor(equipment.get_armor(armor_name))
+        enemy.equip_weapon(equipment.get_weapon(weapon_name))
+        heroes['enemy'] = enemy
+        return redirect(url_for("start_fight"))
 
 
 if __name__ == "__main__":
