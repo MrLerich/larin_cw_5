@@ -66,7 +66,7 @@ class Equipment:
         """"загружает json в переменную EquipmentData"""
         with open("./data/equipment.json") as equipment_file:
         # equipment_file = open("./data/equipment.json")
-        data = json.load(equipment_file)
+            data = json.load(equipment_file)
         # equipment_file.close()
         equipment_schema = marshmallow_dataclass.class_schema(EquipmentData)
         try:
