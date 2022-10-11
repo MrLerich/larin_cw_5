@@ -26,14 +26,14 @@
   {
     "id": 1,
     "name": "футболка",
-    "defence": 0,
-    "stamina_per_turn": 0
+    "defence": 1,
+    "stamina_per_turn": 1.1
     },
     {
     "id": 2,
     "name":"кожаная броня",
-    "defence": 1.2,
-    "stamina_per_turn": 1
+    "defence": 1.5,
+    "stamina_per_turn": 1.2
     },
     {
     "id": 3,

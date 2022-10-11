@@ -26,10 +26,10 @@ class Arena(metaclass=BaseSingleton):
         self.game_is_running = True
 
     def _check_players_hp(self):
-
-        # TODO проверка здоровья игрока и врага и возвращение результата строкой:
-        # TODO может быть три результата:
-        # TODO если Здоровья игроков в порядке то ничего не происходит
+        """проверяет уровень хп бойцов"""
+        # проверка здоровья игрока и врага и возвращение результата строкой:
+        # может быть три результата:
+        # если Здоровья игроков в порядке то ничего не происходит
         # ПРОВЕРКА ЗДОРОВЬЯ ИГРОКА И ВРАГА
         if self.player.hp > 0 and self.enemy.hp > 0:
             return None
@@ -38,35 +38,36 @@ class Arena(metaclass=BaseSingleton):
         if self.enemy.hp <= 0 and self.player.hp <= 0:
             self.battle_result = "Ничья. Усе убилися в хлам!"
         elif self.player.hp <= 0:
-            self.battle_result = f"Игрок {self.player} проигрался в пух и перья!"
+            self.battle_result = f"Игрок {self.player.name} проигрался в пух и перья!"
         else:
-            self.battle_result = f"Игрок {self.player} - Красаувчег! Всех Победятел!"
+            self.battle_result = f"Игрок {self.player.name} - Красаувчег! Всех Победятел!"
 
         return self._end_game()
 
     def _stamina_regeneration(self) -> int:
+        """расчет восстановления здоровья и выносливости"""
         # регенерация здоровья и стамины для игрока и врага за ход
         # в этом методе к количеству стамины игрока и врага прибавляется константное значение.
         # главное чтобы оно не привысило максимальные значения (используйте if)
 
-        #чтобы не дублировать для игрока и соперника код делаем
+        # чтобы не дублировать для игрока и соперника код делаем
         units = (self.player, self.enemy)
-        for unit in units:
 
+        for unit in units:
             if unit.stamina + self.STAMINA_PER_ROUND > unit.unit_class.max_stamina:
                 unit.stamina = unit.unit_class.max_stamina
             else:
-                unit.stamina += self.STAMINA_PER_ROUND
-
+                unit.stamina += self.STAMINA_PER_ROUND  # + random.uniform(0.1, 0.5)
 
     def next_turn(self):
-        # TODO СЛЕДУЮЩИЙ ХОД -> return result | return self.enemy.hit(self.player)
-        # TODO срабатывает когда игроп пропускает ход или когда игрок наносит удар.
-        # TODO создаем поле result и проверяем что вернется в результате функции self._check_players_hp
-        # TODO если result -> возвращаем его
-        # TODO если же результата пока нет и после завершения хода игра продолжается,
-        # TODO тогда запускаем процесс регенирации стамины и здоровья для игроков (self._stamina_regeneration)
-        # TODO и вызываем функцию self.enemy.hit(self.player) - ответный удар врага
+        """расчитывает следующее де"""
+        #СЛЕДУЮЩИЙ ХОД -> return result | return self.enemy.hit(self.player)
+        #срабатывает когда игроп пропускает ход или когда игрок наносит удар.
+        #создаем поле result и проверяем что вернется в результате функции self._check_players_hp
+        #если result -> возвращаем его
+        #если же результата пока нет и после завершения хода игра продолжается,
+        #тогда запускаем процесс регенирации стамины и здоровья для игроков (self._stamina_regeneration)
+        #и вызываем функцию self.enemy.hit(self.player) - ответный удар врага
         result = self._check_players_hp()
         if result is not None:
             return result
@@ -84,19 +85,19 @@ class Arena(metaclass=BaseSingleton):
         return self.battle_result
 
     def player_hit(self):
-        # TODO КНОПКА УДАР ИГРОКА -> return result: str
-        # TODO получаем результат от функции self.player.hit
-        # TODO запускаем следующий ход
-        # TODO возвращаем результат удара строкой
+        #  КНОПКА УДАР ИГРОКА -> return result: str
+        #  получаем результат от функции self.player.hit
+        #  запускаем следующий ход
+        #  возвращаем результат удара строкой
         result = self.player.hit(self.enemy)
         enemy_result = self.next_turn()
         return f"{result}<br>{enemy_result}"
 
     def player_use_skill(self):
-        # TODO КНОПКА ИГРОК ИСПОЛЬЗУЕТ УМЕНИЕ
-        # TODO получаем результат от функции self.use_skill
-        # TODO включаем следующий ход
-        # TODO возвращаем результат удара строкой
+        #  КНОПКА ИГРОК ИСПОЛЬЗУЕТ УМЕНИЕ
+        #  получаем результат от функции self.use_skill
+        #  включаем следующий ход
+        #  возвращаем результат удара строкой
         result = self.player.use_skill(self.enemy)
         enemy_result = self.next_turn()
         return f"{result}<br>{enemy_result}"
